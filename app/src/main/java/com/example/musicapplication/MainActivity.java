@@ -45,13 +45,15 @@ public class MainActivity extends AppCompatActivity {
 
         ViewPaperAdapter viewPaperAdapter = new ViewPaperAdapter(getSupportFragmentManager(), 0);
 
-        viewPaperAdapter.addFragment(listMusicFragment, "a");
-        viewPaperAdapter.addFragment(musicPlayFragment, "b");
-        viewPaperAdapter.addFragment(playListFragment, "c");
+        viewPaperAdapter.addFragment(listMusicFragment, "");
+        viewPaperAdapter.addFragment(musicPlayFragment, "");
+        viewPaperAdapter.addFragment(playListFragment, "");
 
         viewPager.setAdapter(viewPaperAdapter);
 
-        //tabLayout.getTabAt(0).setIcon(R.drawable.)
+        tabLayout.getTabAt(0).setIcon(R.drawable.icon_list);
+        tabLayout.getTabAt(1).setIcon(R.drawable.icon_music);
+        tabLayout.getTabAt(2).setIcon(R.drawable.icon_play);
         BadgeDrawable badgeDrawable = tabLayout.getTabAt(0).getOrCreateBadge();
         badgeDrawable.setVisible(true);
         //badgeDrawable.setNumber(5);
