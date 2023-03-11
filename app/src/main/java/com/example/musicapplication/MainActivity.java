@@ -15,6 +15,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.musicapplication.Class.Song;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,6 +30,11 @@ import android.util.Log;
 
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
@@ -50,11 +58,20 @@ public class MainActivity extends AppCompatActivity {
     private MusicPlayFragment musicPlayFragment;
     private PlayListFragment playListFragment;
 
+    private FirebaseDatabase db;
+    private DatabaseReference ref;
+    private ValueEventListener valueEventListener;
+    private List<Song> mupload;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mupload = new ArrayList<>();
+
         runtimePermission();
+        getSongsOnline();
 
         Button logout =  findViewById(R.id.logoutBtn);
         logout.setOnClickListener(new View.OnClickListener() {
@@ -93,6 +110,27 @@ public class MainActivity extends AppCompatActivity {
         //badgeDrawable.setNumber(5);
 
 
+    }
+
+    private void getSongsOnline() {
+        db =  FirebaseDatabase.getInstance();
+        ref = db.getReference("songs");
+        valueEventListener = ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                mupload.clear();
+                for(DataSnapshot dss : snapshot.getChildren()){
+                    Song song = dss.getValue(Song.class);
+                    //song.setmKey(dss.getKey());
+                    mupload.add(song);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     private class ViewPaperAdapter extends FragmentPagerAdapter {
