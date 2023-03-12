@@ -200,7 +200,6 @@ public class MainActivity extends AppCompatActivity {
                         arrayList.add(singleFile);
                     }
                 }
-
             }
         }
 
@@ -218,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
             items[i] = mySongs.get(i).getName().toString().replace(".mp3", "")
                     .replace(".wav", "");
         }
-        listMusicFragment = ListMusicFragment.newInstance(items);
+        listMusicFragment = ListMusicFragment.newInstance(items, mySongs);
         getSupportFragmentManager().beginTransaction()
                 .commit();
     }

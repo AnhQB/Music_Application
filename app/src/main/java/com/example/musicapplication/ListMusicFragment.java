@@ -1,5 +1,6 @@
 package com.example.musicapplication;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -8,6 +9,7 @@ import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -15,6 +17,7 @@ import android.widget.TextView;
 import java.io.File;
 import java.sql.ClientInfoStatus;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
@@ -28,13 +31,16 @@ public class ListMusicFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
-    //private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
     //private String[] mParam1;
     //private String mParam2;
     private String[] items;
     private ListView listView;
+
+    private LinkedList<File> mySongs;
+    private MusicPlayFragment musicPlayFragment;
 
     public ListMusicFragment() {
         // Required empty public constructor
@@ -49,11 +55,11 @@ public class ListMusicFragment extends Fragment {
      * @return A new instance of fragment ListMusicFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ListMusicFragment newInstance(String[] param1) {
+    public static ListMusicFragment newInstance(String[] param1, LinkedList<File> param2) {
         ListMusicFragment fragment = new ListMusicFragment();
         Bundle args = new Bundle();
         args.putStringArray(ARG_PARAM1, param1);
-        //args.putString(ARG_PARAM2, param2);
+        args.putSerializable(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -73,6 +79,7 @@ public class ListMusicFragment extends Fragment {
             if (items != null && items.length > 0) {
                 displaySong();
             }
+            mySongs = (LinkedList<File>) getArguments().getSerializable(ARG_PARAM2);
         }
         return view;
     }
@@ -80,6 +87,20 @@ public class ListMusicFragment extends Fragment {
     public void displaySong(){
         CustomAdapter customAdapter = new CustomAdapter();
         listView.setAdapter(customAdapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String songName = (String) listView.getItemAtPosition(position);
+
+                startActivity(new Intent(getContext(),MusicPlayFragment.class)
+                        .putExtra("songs",mySongs)
+                        .putExtra("songName", songName)
+                        .putExtra("pos",position)
+                );
+
+            }
+        });
     }
 
     class CustomAdapter extends BaseAdapter{
