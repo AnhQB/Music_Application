@@ -1,5 +1,19 @@
 package com.example.musicapplication;
 
+import android.os.Bundle;
+
+import com.google.android.material.snackbar.Snackbar;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.view.View;
+
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
+
+import com.example.musicapplication.databinding.ActivityAddMusicBinding;
 import android.app.MediaRouteActionProvider;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
@@ -20,7 +34,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 
-public class AddMusicFragment extends Fragment {
+public class AddMusic extends AppCompatActivity {
+
     TextView textViewImage;
     ProgressBar proogressBar;
     Uri audioUri;
@@ -34,4 +49,16 @@ public class AddMusicFragment extends Fragment {
     TextView title, artist, durations;
     ImageView album_art;
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_add_music);
+
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+
+        return false;
+    }
 }
