@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayout = findViewById(R.id.tab_Layout);
 
         //listMusicFragment = new ListMusicFragment();
-        musicPlayFragment = new MusicPlayFragment();
+        //musicPlayFragment = new MusicPlayFragment();
         playListFragment = new PlayListFragment();
 
         tabLayout.setupWithViewPager(viewPager);
@@ -97,14 +97,14 @@ public class MainActivity extends AppCompatActivity {
         ViewPaperAdapter viewPaperAdapter = new ViewPaperAdapter(getSupportFragmentManager(), 0);
 
         viewPaperAdapter.addFragment(listMusicFragment, "");
-        viewPaperAdapter.addFragment(musicPlayFragment, "");
+        //viewPaperAdapter.addFragment(musicPlayFragment, "");
         viewPaperAdapter.addFragment(playListFragment, "");
 
         viewPager.setAdapter(viewPaperAdapter);
 
         tabLayout.getTabAt(0).setIcon(R.drawable.icon_list);
         tabLayout.getTabAt(1).setIcon(R.drawable.icon_music);
-        tabLayout.getTabAt(2).setIcon(R.drawable.icon_play);
+        //tabLayout.getTabAt(2).setIcon(R.drawable.icon_play);
         BadgeDrawable badgeDrawable = tabLayout.getTabAt(0).getOrCreateBadge();
         badgeDrawable.setVisible(true);
         //badgeDrawable.setNumber(5);
@@ -200,7 +200,6 @@ public class MainActivity extends AppCompatActivity {
                         arrayList.add(singleFile);
                     }
                 }
-
             }
         }
 
@@ -208,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void displaySong(){
-            File file = Environment.getExternalStorageDirectory();
+        File file = Environment.getExternalStorageDirectory();
 //        if (file.exists()) {
 //            LinkedList<File> songsList = findSong(file);
 //        }
@@ -218,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
             items[i] = mySongs.get(i).getName().toString().replace(".mp3", "")
                     .replace(".wav", "");
         }
-        listMusicFragment = ListMusicFragment.newInstance(items);
+        listMusicFragment = ListMusicFragment.newInstance(items, mySongs);
         getSupportFragmentManager().beginTransaction()
                 .commit();
     }
