@@ -103,8 +103,8 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.getTabAt(0).setIcon(R.drawable.icon_list);
         tabLayout.getTabAt(1).setIcon(R.drawable.icon_music);
 
-        tabLayout.getTabAt(2).setIcon(R.drawable.icon_play);
-        tabLayout.getTabAt(3).setIcon(R.drawable.ic_baseline_menu_24);
+        //tabLayout.getTabAt(2).setIcon(R.drawable.icon_play);
+        tabLayout.getTabAt(2).setIcon(R.drawable.ic_baseline_menu_24);
 
         //tabLayout.getTabAt(2).setIcon(R.drawable.icon_play);
 
