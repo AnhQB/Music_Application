@@ -57,11 +57,13 @@ public class MainActivity extends AppCompatActivity {
     private ListMusicFragment listMusicFragment;
     private MusicPlayFragment musicPlayFragment;
     private PlayListFragment playListFragment;
+    private MenuFragment menuFragment;
 
     private FirebaseDatabase db;
     private DatabaseReference ref;
     private ValueEventListener valueEventListener;
     private List<Song> mupload;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,21 +75,15 @@ public class MainActivity extends AppCompatActivity {
         runtimePermission();
         getSongsOnline();
 
-        Button logout =  findViewById(R.id.logoutBtn);
-        logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(getApplicationContext(), Login.class));
-                finish();
-            }
-        });
+
+
+
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         viewPager = findViewById(R.id.view_paper);
         tabLayout = findViewById(R.id.tab_Layout);
-
+        menuFragment = new MenuFragment();
         //listMusicFragment = new ListMusicFragment();
         musicPlayFragment = new MusicPlayFragment();
         playListFragment = new PlayListFragment();
@@ -96,15 +92,19 @@ public class MainActivity extends AppCompatActivity {
 
         ViewPaperAdapter viewPaperAdapter = new ViewPaperAdapter(getSupportFragmentManager(), 0);
 
+
         viewPaperAdapter.addFragment(listMusicFragment, "");
         viewPaperAdapter.addFragment(musicPlayFragment, "");
         viewPaperAdapter.addFragment(playListFragment, "");
+        viewPaperAdapter.addFragment(menuFragment, "");
 
         viewPager.setAdapter(viewPaperAdapter);
 
         tabLayout.getTabAt(0).setIcon(R.drawable.icon_list);
         tabLayout.getTabAt(1).setIcon(R.drawable.icon_music);
         tabLayout.getTabAt(2).setIcon(R.drawable.icon_play);
+        tabLayout.getTabAt(3).setIcon(R.drawable.ic_baseline_menu_24);
+
         BadgeDrawable badgeDrawable = tabLayout.getTabAt(0).getOrCreateBadge();
         badgeDrawable.setVisible(true);
         //badgeDrawable.setNumber(5);
