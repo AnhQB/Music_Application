@@ -8,27 +8,18 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
+import com.example.musicapplication.Class.UploadSong;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.snackbar.Snackbar;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-
-import com.example.musicapplication.databinding.ActivityAddMusicBinding;
-import android.app.MediaRouteActionProvider;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 
-import android.os.storage.StorageManager;
 import android.provider.OpenableColumns;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -40,8 +31,8 @@ import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
@@ -67,7 +58,7 @@ public class AddMusic extends AppCompatActivity implements AdapterView.OnItemSel
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_music);
+        setContentView(R.layout.activity_main);
         textViewImage = findViewById(R.id.textViewSongFileSelected);
         progressBar = findViewById(R.id.progressBar);
         title = findViewById(R.id.title);
@@ -91,9 +82,9 @@ public class AddMusic extends AppCompatActivity implements AdapterView.OnItemSel
         categories.add("Birthday songs");
         categories.add("God songs");
 
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, com.karumi.dexter.R.layout.support_simple_spinner_dropdown_item, categories);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
 
-        dataAdapter.setDropDownViewResource(com.karumi.dexter.R.layout.support_simple_spinner_dropdown_item);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(dataAdapter);
     }
 
@@ -110,7 +101,7 @@ public class AddMusic extends AppCompatActivity implements AdapterView.OnItemSel
 
     public void openAudioView (View v) {
         Intent i = new Intent(Intent.ACTION_GET_CONTENT);
-        i.setType("audio/+");
+        i.setType("audio/*");
         startActivityForResult(i, 101);
     }
 
@@ -122,11 +113,11 @@ public class AddMusic extends AppCompatActivity implements AdapterView.OnItemSel
             audioUri = data.getData();
             String fileNames = getFileName(audioUri);
             textViewImage.setText(fileNames);
-            metadataRetriever.setDataSource(String.valueOf(this.audioUri));
+            metadataRetriever.setDataSource(this,audioUri);
 
             art = metadataRetriever.getEmbeddedPicture();
             Bitmap bitmap = BitmapFactory.decodeByteArray(art,0,art.length);
-            album_art.setImageBitmap(bitmap);
+            //album_art.setImageBitmap(bitmap);
 
             album.setText(metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM));
             artist.setText(metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST));
@@ -137,7 +128,7 @@ public class AddMusic extends AppCompatActivity implements AdapterView.OnItemSel
             artist1 = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
             title1 = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
             durations1 = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
-         }
+        }
     }
 
     @SuppressLint("Range")
@@ -192,11 +183,20 @@ public class AddMusic extends AppCompatActivity implements AdapterView.OnItemSel
                     storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
-
+                            UploadSong uploadSong = new UploadSong(songCategory, title1, artist1,durations1,uri.toString());
+                            String uploadId = referenceSongs.push().getKey();
+                            referenceSongs.child(uploadId).setValue(uploadSong);
                         }
                     });
                 }
+            }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                    double progress = (100.0 * snapshot.getBytesTransferred()/snapshot.getTotalByteCount());
+                }
             });
+        } else{
+            Toast.makeText(this, "No file selected to uploads", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -206,24 +206,3 @@ public class AddMusic extends AppCompatActivity implements AdapterView.OnItemSel
         return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(audioUri));
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
