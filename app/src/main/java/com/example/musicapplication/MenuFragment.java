@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -85,6 +87,17 @@ public class MenuFragment extends Fragment {
         mLoginButton = view.findViewById(R.id.loginmenuBtn);
         mLogoutButton = view.findViewById(R.id.logoutmenuBtn);
         btn_AddMusic = view.findViewById(R.id.btn_addMusic);
+        mLogoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                FragmentManager manager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = manager.beginTransaction();
+                fragmentTransaction.detach(MenuFragment.this);
+                fragmentTransaction.attach(MenuFragment.this);
+                fragmentTransaction.commitAllowingStateLoss();
+            }
+        });
 
         btn_AddMusic.setOnClickListener(new View.OnClickListener() {
             @Override
