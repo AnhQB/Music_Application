@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.musicapplication.Class.Song;
+import com.example.musicapplication.Class.UploadSong;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.badge.BadgeDrawable;
@@ -62,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseDatabase db;
     private DatabaseReference ref;
     private ValueEventListener valueEventListener;
-    private List<Song> mupload;
+    private List<UploadSong> mupload;
 
 
     @Override
@@ -123,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 mupload.clear();
                 for(DataSnapshot dss : snapshot.getChildren()){
-                    Song song = dss.getValue(Song.class);
+                    UploadSong song = dss.getValue(UploadSong.class);
                     //song.setmKey(dss.getKey());
                     mupload.add(song);
                 }

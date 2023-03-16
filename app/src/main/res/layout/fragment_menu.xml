@@ -9,18 +9,31 @@
         android:id="@+id/loginmenuBtn"
         android:layout_width="387dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
-        android:text="Login"/>
+        android:layout_gravity="center_horizontal|top"
+        android:backgroundTint="#FFFFFF"
+        android:text="Login"
+        android:textColor="#000000" />
 
     <Button
         android:id="@+id/logoutmenuBtn"
         android:layout_width="387dp"
         android:layout_height="wrap_content"
+        android:layout_gravity="center|center_horizontal|top"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
-        android:text="Logout"/>
+        android:backgroundTint="#FFFFFF"
+        android:text="Logout"
+        android:textColor="#000000" />
+
+    <Button
+        android:id="@+id/btn_addMusic"
+        android:layout_width="387dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="50dp"
+        android:backgroundTint="#FFFFFF"
+        android:text="Add Music"
+        android:textColor="#000000" />
 
 </FrameLayout>

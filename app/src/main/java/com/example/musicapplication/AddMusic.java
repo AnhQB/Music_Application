@@ -58,7 +58,7 @@ public class AddMusic extends AppCompatActivity implements AdapterView.OnItemSel
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_add_music);
         textViewImage = findViewById(R.id.textViewSongFileSelected);
         progressBar = findViewById(R.id.progressBar);
         title = findViewById(R.id.title);

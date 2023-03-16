@@ -27,6 +27,7 @@ public class MenuFragment extends Fragment {
     private FirebaseAuth mAuth;
     private Button mLoginButton;
     private Button mLogoutButton;
+    private Button btn_AddMusic;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -83,6 +84,15 @@ public class MenuFragment extends Fragment {
         // Khởi tạo các thành phần tương ứng với nút đăng nhập và đăng xuất
         mLoginButton = view.findViewById(R.id.loginmenuBtn);
         mLogoutButton = view.findViewById(R.id.logoutmenuBtn);
+        btn_AddMusic = view.findViewById(R.id.btn_addMusic);
+
+        btn_AddMusic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), AddMusic.class);
+                startActivity(intent);
+            }
+        });
 
         // Kiểm tra xem người dùng đã đăng nhập hay chưa
         if (mAuth.getCurrentUser() != null) {
@@ -90,13 +100,15 @@ public class MenuFragment extends Fragment {
             // Ẩn nút đăng nhập và hiển thị nút đăng xuất
             mLoginButton.setVisibility(View.GONE);
             mLogoutButton.setVisibility(View.VISIBLE);
+	    btn_AddMusic.setVisibility(View.VISIBLE);
         } else {
             // Người dùng chưa đăng nhập
             // Hiển thị nút đăng nhập và ẩn nút đăng xuất
             mLoginButton.setVisibility(View.VISIBLE);
             mLogoutButton.setVisibility(View.GONE);
+            btn_AddMusic.setVisibility(View.GONE);
         }
 
         return view;
-        }
+    }
 }
