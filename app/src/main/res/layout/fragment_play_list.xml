@@ -5,11 +5,12 @@
     android:layout_height="match_parent"
     tools:context=".PlayListFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Play List"
-        android:padding="50dp"
-        />
+    <ListView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:divider="@android:color/transparent"
+    android:padding="9dp"
+    android:id="@+id/listMusicOnline"
+    android:dividerHeight="10.sp"
+    />
 </FrameLayout>

@@ -116,8 +116,6 @@ public class AddMusic extends AppCompatActivity implements AdapterView.OnItemSel
             metadataRetriever.setDataSource(this,audioUri);
 
             art = metadataRetriever.getEmbeddedPicture();
-            Bitmap bitmap = BitmapFactory.decodeByteArray(art,0,art.length);
-            //album_art.setImageBitmap(bitmap);
 
             album.setText(metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM));
             artist.setText(metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST));
@@ -193,6 +191,7 @@ public class AddMusic extends AppCompatActivity implements AdapterView.OnItemSel
                 @Override
                 public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
                     double progress = (100.0 * snapshot.getBytesTransferred()/snapshot.getTotalByteCount());
+                    progressBar.setProgress((int)progress);
                 }
             });
         } else{

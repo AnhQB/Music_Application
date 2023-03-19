@@ -1,5 +1,6 @@
 package com.example.musicapplication;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,6 +8,16 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import com.google.firebase.database.DatabaseReference;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.LinkedList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +34,10 @@ public class PlayListFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private String[] items;
+    private ListView listView;
+    private LinkedList<File> mySongs;
+    DatabaseReference song;
 
     public PlayListFragment() {
         // Required empty public constructor
@@ -52,13 +67,69 @@ public class PlayListFragment extends Fragment {
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+
         }
     }
 
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_play_list, container, false);
+
+        View view = inflater.inflate(R.layout.fragment_play_list, container, false);
+        listView = view.findViewById(R.id.listMusicOnline);
+        if (getArguments() != null) {
+            items = getArguments().getStringArray(ARG_PARAM1);
+            if (items != null && items.length > 0) {
+                displaySong();
+            }
+            mySongs = (LinkedList<File>) getArguments().getSerializable(ARG_PARAM2);
+        }
+        return view;
+    }
+
+    public void displaySong(){
+        PlayListFragment.CustomAdapter customAdapter = new PlayListFragment.CustomAdapter();
+        listView.setAdapter(customAdapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String songName = (String) items[position];
+
+                ArrayList<File> songs = new ArrayList<>();
+                songs.addAll(mySongs);
+                startActivity(new Intent(getContext().getApplicationContext(), MusicPlayFragment.class)
+                        .putExtra("song", songs)
+                        .putExtra("songName",songName)
+                        .putExtra("position", position));
+
+            }
+        });
+    }
+
+    class CustomAdapter extends BaseAdapter{
+
+        @Override
+        public int getCount() {
+            return items.length;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View view = getLayoutInflater().inflate(R.layout.list_item, null);
+            TextView txtSong = view.findViewById(R.id.txtSong);
+            txtSong.setSelected(true);
+            txtSong.setText(items[position]);
+            return view;
+        }
     }
 }
