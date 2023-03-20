@@ -63,8 +63,9 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseDatabase db;
     private DatabaseReference ref;
     private ValueEventListener valueEventListener;
-    private List<UploadSong> mupload;
+    private List<Song> mupload;
 
+    private boolean isOnlineLoaded = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +77,42 @@ public class MainActivity extends AppCompatActivity {
         runtimePermission();
         getSongsOnline();
 
+    }
 
+    private void getSongsOnline() {
+        db =  FirebaseDatabase.getInstance();
+        ref = db.getReference("songs");
+        valueEventListener = ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                mupload.clear();
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    Song song = ds.getValue(Song.class);
+                    // xử lý đối tượng song ở đây
+                    mupload.add(song);
+                }
+                playListFragment = PlayListFragment.newInstance(mupload, null);
+                isOnlineLoaded = true;
+                setupViewPaper();
+                /*getSupportFragmentManager().beginTransaction()
+                        .add(R.id.view_paper, playListFragment)
+                        .commit();*/
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // xử lý lỗi ở đây
+            }
+        });
+    }
+
+    private void setupViewPaper(){
+
+       // getSupportFragmentManager().beginTransaction()
+                /*.add(R.id.view_paper, listMusicFragment, "local_fragment")
+                .add(R.id.view_paper, playListFragment, "online_fragment")*/
+                //.hide(playListFragment) // Ẩn fragment online lúc ban đầu
+                //.commit();
 
 
 
@@ -87,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
         menuFragment = new MenuFragment();
         //listMusicFragment = new ListMusicFragment();
         //musicPlayFragment = new MusicPlayFragment();
-        playListFragment = new PlayListFragment();
+        //playListFragment = new PlayListFragment();
 
         tabLayout.setupWithViewPager(viewPager);
 
@@ -114,27 +150,6 @@ public class MainActivity extends AppCompatActivity {
         //badgeDrawable.setNumber(5);
 
 
-    }
-
-    private void getSongsOnline() {
-        db =  FirebaseDatabase.getInstance();
-        ref = db.getReference("songs");
-        valueEventListener = ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                mupload.clear();
-                for(DataSnapshot dss : snapshot.getChildren()){
-                    UploadSong song = dss.getValue(UploadSong.class);
-                    //song.setmKey(dss.getKey());
-                    mupload.add(song);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
     }
 
     private class ViewPaperAdapter extends FragmentPagerAdapter {
@@ -222,7 +237,8 @@ public class MainActivity extends AppCompatActivity {
                     .replace(".wav", "");
         }
         listMusicFragment = ListMusicFragment.newInstance(items, mySongs);
-        getSupportFragmentManager().beginTransaction()
-                .commit();
+        /*getSupportFragmentManager().beginTransaction()
+                .commit();*/
     }
+
 }
