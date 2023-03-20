@@ -225,7 +225,7 @@ public class MusicPlayFragment extends AppCompatActivity {
             public void onClick(View v) {
                 mediaPlayer.stop();
                 mediaPlayer.release();
-                if (check == 1){
+                if (check == 0){
                     position = ((position-1)<0)? (songs.size()-1): position-1;
                     Uri uri = Uri.parse(songs.get(position).toString());
                     mediaPlayer = MediaPlayer.create (getApplicationContext(), uri);
