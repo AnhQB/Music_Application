@@ -1,5 +1,6 @@
 package com.example.musicapplication;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -8,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -16,6 +18,7 @@ import com.example.musicapplication.Class.Song;
 
 import java.io.File;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -35,7 +38,7 @@ public class PlayListFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private List<Song> listSongOnl;
+    private ArrayList<Song> listSongOnl;
     private ListView listView;
 
     public PlayListFragment() {
@@ -74,10 +77,9 @@ public class PlayListFragment extends Fragment {
 
 
         if (getArguments() != null) {
-            listSongOnl = (List<Song>) getArguments().getSerializable(ARG_PARAM1);
+            listSongOnl = (ArrayList) getArguments().getParcelableArrayList(ARG_PARAM1);
             if (listSongOnl != null && listSongOnl.size() > 0) {
                 displaySong();
-
             }
         }
 
@@ -87,6 +89,18 @@ public class PlayListFragment extends Fragment {
     private void displaySong() {
         PlayListFragment.CustomAdapter customAdapter = new PlayListFragment.CustomAdapter();
         listView.setAdapter(customAdapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String songName = (String) listSongOnl.get(position).getSongTitle();
+                startActivity(new Intent(getContext().getApplicationContext(), MusicPlayFragment.class)
+                        .putExtra("listOn", listSongOnl)
+                        .putExtra("songName", songName)
+                        .putExtra("position", position)
+                        .putExtra("check", 1));
+            }
+        });
     }
 
     class CustomAdapter extends BaseAdapter {

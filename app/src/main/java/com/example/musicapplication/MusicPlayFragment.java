@@ -19,6 +19,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import com.example.musicapplication.Class.Song;
+
 import java.io.File;
 import java.util.ArrayList;
 
@@ -37,6 +39,7 @@ public class MusicPlayFragment extends AppCompatActivity {
     // TODO: Rename and change types of parameters
     private String songName;
     private ArrayList<File> songs;
+    private ArrayList<Song> songOn;
 
     Button btnPlay,btnNext,btnPrevious,btnFastForward,btnFastBackward;
     TextView txtSongName,txtSongStart,txtSongEnd;
@@ -78,14 +81,34 @@ public class MusicPlayFragment extends AppCompatActivity {
             mediaPlayer.release();
         }
 
+//        // Tạo Uri từ đường dẫn trên
+//        Uri uri = Uri.parse(firebaseMusicLink);
+//
+//// Đọc dữ liệu từ Uri và lưu vào InputStream
+//        InputStream inputStream = getContentResolver().openInputStream(uri);
+//
+//// Đưa nội dung của InputStream vào MediaPlayer
+//        mediaPlayer.setDataSource(inputStream.getFD());
+//        mediaPlayer.prepare();
+//        mediaPlayer.start();
+
+
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
+        int check = bundle.getInt("check");
         songs = (ArrayList) bundle.getParcelableArrayList("song");
+        songOn = (ArrayList) bundle.getParcelableArrayList("listOn");
         String sName = intent.getStringExtra("songName");
         position = intent.getIntExtra("position",0);
         txtSongName.setSelected(true);
-        Uri uri = Uri.parse(songs.get(position).getPath());
+        Uri uri = null;
         txtSongName.setText(bundle.getString("songName"));
+        if (check == 0) {
+            uri = Uri.parse(songs.get(position).getPath());
+        }
+        else{
+            uri =Uri.parse(songOn.get(position).getSongLink());
+        }
 
         mediaPlayer = MediaPlayer.create(getApplicationContext(),uri);
         mediaPlayer.start();
@@ -180,10 +203,18 @@ public class MusicPlayFragment extends AppCompatActivity {
             public void onClick(View v) {
                 mediaPlayer.stop();
                 mediaPlayer.release();
-                position = ((position+1)%songs.size());
-                Uri uri = Uri.parse (songs.get(position).toString());
-                mediaPlayer = MediaPlayer.create (getApplicationContext(), uri);
-                songName = songs.get(position).getName();
+                if (check == 0) {
+                    position = ((position + 1) % songs.size());
+                    Uri uri = Uri.parse(songs.get(position).toString());
+                    mediaPlayer = MediaPlayer.create(getApplicationContext(), uri);
+                    songName = songs.get(position).getName();
+                }
+                else{
+                    position = ((position + 1) % songOn.size());
+                    Uri uri = Uri.parse(songOn.get(position).getSongLink());
+                    mediaPlayer = MediaPlayer.create(getApplicationContext(), uri);
+                    songName = songOn.get(position).getSongTitle();
+                }
                 txtSongName.setText (songName);
                 mediaPlayer.start();
             }
@@ -194,10 +225,18 @@ public class MusicPlayFragment extends AppCompatActivity {
             public void onClick(View v) {
                 mediaPlayer.stop();
                 mediaPlayer.release();
-                position = ((position-1)<0)? (songs.size()-1): position-1;
-                Uri uri = Uri.parse(songs.get(position).toString());
-                mediaPlayer = MediaPlayer.create (getApplicationContext(), uri);
-                songName = songs.get(position).getName();
+                if (check == 1){
+                    position = ((position-1)<0)? (songs.size()-1): position-1;
+                    Uri uri = Uri.parse(songs.get(position).toString());
+                    mediaPlayer = MediaPlayer.create (getApplicationContext(), uri);
+                    songName = songs.get(position).getName();
+                }
+                else{
+                    position = ((position-1)<0)? (songOn.size()-1): position-1;
+                    Uri uri = Uri.parse(songOn.get(position).getSongLink());
+                    mediaPlayer = MediaPlayer.create (getApplicationContext(), uri);
+                    songName = songOn.get(position).getSongTitle();
+                }
                 txtSongName.setText (songName);
                 mediaPlayer.start();
             }

@@ -108,7 +108,8 @@ public class ListMusicFragment extends Fragment {
                 startActivity(new Intent(getContext().getApplicationContext(), MusicPlayFragment.class)
                         .putExtra("song", songs)
                         .putExtra("songName",songName)
-                        .putExtra("position", position));
+                        .putExtra("position", position)
+                        .putExtra("check",0));
 
             }
         });
