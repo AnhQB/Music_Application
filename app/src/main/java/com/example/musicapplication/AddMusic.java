@@ -193,6 +193,8 @@ public class AddMusic extends AppCompatActivity implements AdapterView.OnItemSel
                 @Override
                 public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
                     double progress = (100.0 * snapshot.getBytesTransferred()/snapshot.getTotalByteCount());
+
+                    progressBar.setProgress((int)progress);
                 }
             });
         } else{

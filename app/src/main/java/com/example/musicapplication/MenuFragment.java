@@ -13,6 +13,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 
 /**
@@ -91,11 +94,9 @@ public class MenuFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
-                FragmentManager manager = getActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = manager.beginTransaction();
-                fragmentTransaction.detach(MenuFragment.this);
-                fragmentTransaction.attach(MenuFragment.this);
-                fragmentTransaction.commitAllowingStateLoss();
+                mLoginButton.setVisibility(View.VISIBLE);
+                mLogoutButton.setVisibility(View.GONE);
+                btn_AddMusic.setVisibility(View.GONE);
             }
         });
 
@@ -111,9 +112,11 @@ public class MenuFragment extends Fragment {
         if (mAuth.getCurrentUser() != null) {
             // Người dùng đã đăng nhập
             // Ẩn nút đăng nhập và hiển thị nút đăng xuất
+
             mLoginButton.setVisibility(View.GONE);
             mLogoutButton.setVisibility(View.VISIBLE);
-	    btn_AddMusic.setVisibility(View.VISIBLE);
+            mLogoutButton.setText("Bye " + mAuth.getCurrentUser().getEmail().split("@gmail.com")[0]);
+	        btn_AddMusic.setVisibility(View.VISIBLE);
         } else {
             // Người dùng chưa đăng nhập
             // Hiển thị nút đăng nhập và ẩn nút đăng xuất
