@@ -1,6 +1,8 @@
 package com.example.musicapplication.Class;
 
-public class Song {
+import java.io.Serializable;
+
+public class Song implements Serializable {
     private String artist;
     private String durations;
     private String songLink;
