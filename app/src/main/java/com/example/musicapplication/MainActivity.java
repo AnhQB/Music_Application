@@ -75,7 +75,10 @@ public class MainActivity extends AppCompatActivity {
         mupload = new ArrayList<>();
 
         runtimePermission();
-        getSongsOnline();
+        //getSongsOnline();
+        setupViewPaper();
+
+
 
     }
 
@@ -114,7 +117,8 @@ public class MainActivity extends AppCompatActivity {
                 //.hide(playListFragment) // Ẩn fragment online lúc ban đầu
                 //.commit();
 
-
+        playListFragment = PlayListFragment.newInstance(mupload, null);
+        isOnlineLoaded = true;
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -227,9 +231,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void displaySong(){
         File file = Environment.getExternalStorageDirectory();
-//        if (file.exists()) {
-//            LinkedList<File> songsList = findSong(file);
-//        }
         final LinkedList<File> mySongs = findSong(file);
         String[] items = new String[mySongs.size()];
         for(int i = 0; i < mySongs.size(); i++){
@@ -237,8 +238,6 @@ public class MainActivity extends AppCompatActivity {
                     .replace(".wav", "");
         }
         listMusicFragment = ListMusicFragment.newInstance(items, mySongs);
-        /*getSupportFragmentManager().beginTransaction()
-                .commit();*/
     }
 
 }
